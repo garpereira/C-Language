@@ -1,0 +1,13 @@
+A 3 B C D
+B 2 E F
+E 2 K L
+F 0
+K 0
+L 0
+C 1 G
+G 0
+D 3 H I J
+H 1 M
+M 0
+I 0
+J 0
