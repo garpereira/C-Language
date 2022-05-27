@@ -1,0 +1,952 @@
+#include <stdio.h>
+#include <string.h>
+/**********ALOCANDO PORTA AVIOES*******************************************************************************************************************************/
+int fportaavioes(int jogador[10][10]){
+	int linha, coluna, i , j, sentido, novosentido, numerar=0;
+	for(i=0;i<10;i++){
+		printf("%5d ", numerar++);
+	}
+	numerar = 0;
+	printf("\n");
+	for(i=0;i<10;i++){
+		printf("%d ", numerar++);
+		for(j=0;j<10;j++){
+			printf("[ %d ] ", jogador[i][j]);
+		}
+		printf("\n");
+	}
+	numerar = 0;
+	printf("\n\nDigite a posicao que deseja iniciar seu Porta-avioes |4 casas|\n");
+	scanf("%d %d", &linha, &coluna);
+	while(linha<0 || linha > 9 || coluna <0 || coluna > 9){
+		printf("\nPosicao invalida, digite (0-9) para linha ou coluna\n");
+		scanf("%d %d", &linha,&coluna);
+	}
+	printf("\nEm qual sentido deseja posicionar o navio?\n(1) Vertical (2) Horizontal\n");
+	scanf("%d", &sentido);
+	while(sentido <1 || sentido > 2){
+		printf("\nOpcao invalida, digite 1 para Vertical ou 2 para Horizontal\n");
+		scanf("%d", &sentido);
+	}
+	switch(sentido){
+		case 1: // vertical, precisamos atribuir 1 somente nas linhas
+			if(linha+3 > 9){ // verificando se nao ultrapassa os limites da matriz
+				printf("\nNavio fora dos limites da grade\nDeseja virar para Horizontal?\n(1) Sim (2) Nao\n");
+				scanf("%d", &novosentido);
+				while(novosentido < 1 || novosentido>2){
+					printf("Opcao invalida\n");
+					scanf("%d", &novosentido);
+				}
+				switch(novosentido){
+					case 1:
+						if(coluna+3 > 9){//verificando se nao ultapassa os limites da matriz
+							printf("\nImpossivel alocar o navio, escolha outra posicao\n"); // se ultrapassar
+							return fportaavioes(jogador);
+						}
+						else{ // caso nao, atribuir valor a coluna
+							for(i=coluna;i<coluna+4;i++){
+								jogador[linha][i] = 1;
+							}
+							printf("\nNavio alocado com sucesso!\n\n");
+								return;
+						}
+						break;
+					case 2:
+						return fportaavioes(jogador);
+				}
+			}
+			else{ // caso nao, atribuir valor as linhas
+				for(i=linha;i<linha+4;i++){
+					jogador[i][coluna] = 1;
+				}
+				printf("\nNavio alocado com sucesso!\n\n");
+					return;
+				}
+		case 2:
+			if(coluna+3 > 9){//horizontal, verificando se nao ultapassa os limites da matriz
+				printf("\nNavio fora dos limites da grade\nDeseja virar para Vertical?\n(1) Sim (2) Nao\n");
+				scanf("%d", &novosentido);
+				while(novosentido<1 || novosentido>2){
+					printf("\nOpcao invalida, digite 1 para Sim ou 2 para Nao\n");
+					scanf("%d", &novosentido);
+				}
+				switch(novosentido){
+					case 1:
+						if(linha+3>9){ // verificando se nao ultrapassa os limites da grade
+							printf("\nImpossivel alocar o navio, escolha outra posicao\n");
+							return fportaavioes(jogador);
+						}
+						else{//senao ultrapassar, entao atribui valor a linha
+							for(i=linha;i<linha+4;i++){
+								jogador[i][coluna] = 1;
+							}
+							printf("\nNavio alocado com sucesso!\n\n");
+							return;
+						}
+						break;
+					case 2:
+						return fportaavioes(jogador);
+				}
+
+			}
+			else{ // caso nao, atribuir valor a coluna
+				for(i=coluna;i<coluna+4;i++){
+					jogador[linha][i] = 1;
+				}
+				printf("\nNavio alocado com sucesso!\n\n");
+					return;
+			}
+	}
+}
+
+/**********ALOCANDO NAVIOTANQUE*******************************************************************************************************************************/
+int fnaviotanque(int jogador[10][10],int  *contanavio){
+	int temp = *contanavio, numerar=0;
+	int i, j, linha, coluna;
+	int sentido, novosentido;
+	for(i=0;i<10;i++){
+		printf("%5d ", numerar++);
+	}
+	numerar = 0;
+	printf("\n");
+	for(i=0;i<10;i++){
+		printf("%d ", numerar++);
+		for(j=0;j<10;j++){
+			printf("[ %d ] ", jogador[i][j]);
+		}
+		printf("\n");
+	}
+	numerar = 0;
+	printf("\nDigite a posicao que deseja iniciar seu %do Navio-tanque |3 casas|\n", *contanavio+1);
+	scanf("%d %d",&linha,&coluna);
+	while(linha<0 || linha >9 || coluna < 0 || coluna> 9){
+		printf("\nPosicao invalida, digite (0-9) para linha ou coluna\n");
+		scanf("%d %d", &linha,&coluna);
+	}
+	while(jogador[linha][coluna] == 1){ // verificando se existe um navio na posicao
+		printf("\nJa existe um navio aqui, digite outra posicao\n");
+		scanf("%d %d", &linha,&coluna);
+	}
+	printf("\nEm qual sentido deseja posicionar seu navio?\n(1) Vertical (2) Horizontal\n");
+	scanf("%d", &sentido);
+	while(sentido <1 || sentido>2){
+		printf("\nOpcao invalida, digite 1 para Vertical ou 2 para Horizontal\n");
+		scanf("%d", &sentido);
+	}
+	switch(sentido){
+		case 1: //vertical
+			if(linha+2 > 9){//verificando se nao ultrapassa os limites da matriz
+				printf("\nNavio fora dos limites da grade\nDeseja virar para Horizontal?\n(1) Sim (2) Nao\n");
+				scanf("%d", &novosentido);
+				while(novosentido<1 || novosentido>2){
+					printf("\nOpcao invalida, digite 1 para Sim ou 2 para Nao\n");
+					scanf("%d", &novosentido);
+				}
+				switch(novosentido){
+					case 1: //alocando na horizontal
+						if(coluna+2 > 9){//verificando se excede limite da grade
+							printf("\nImpossivel alocar o navio, selecione outra posicao\n\n");
+							fnaviotanque(jogador,contanavio);
+						}
+						else{
+							for(i=coluna;i<coluna+3;i++){ // verificando se existe algum navio na direção
+								if(jogador[linha][i] == 1){
+									printf("\nJa existe um navio nesta direcao, selecione outra posicao\n\n"); // se houver, volta pro inicio da funcao
+									fnaviotanque(jogador,contanavio);
+								}
+							}
+							for(i=coluna;i<coluna+3;i++){//caso o primeiro 'for' nao seja verdade, atribui os valores do navio na matriz
+								jogador[linha][i] = 1;
+							}
+							printf("\nNavio alocado com Sucesso!\n\n");
+							if(*contanavio == 1){
+								*contanavio = 0;
+								return;
+							}
+							else{
+								temp++;
+								*contanavio = temp;
+								fnaviotanque(jogador,contanavio);
+							}
+						}
+					break;
+					case 2://senao quiser virar, reinicia a funcao
+						fnaviotanque(jogador,contanavio);
+						break;
+				}
+			}
+			else{//caso nao, atribuir valores a linha
+				for(i=linha;i<linha+3;i++){//verificando se nao ha navio na reta
+					if(jogador[i][coluna] == 1){
+						printf("\nJa existe um navio nesta direcao, selecione outra posicao\n\n");
+						fnaviotanque(jogador,contanavio);
+					}
+				}
+				for(i=linha;i<linha+3;i++){//caso nao houver, vira para este 'for' e atribui valores a reta
+					jogador[i][coluna] = 1;
+				}
+				printf("\nNavio alocado com Sucesso!\n\n");
+				if(*contanavio == 1){
+					*contanavio = 0;
+					return;
+				}
+				else{
+					temp++;
+					*contanavio = temp;
+					fnaviotanque(jogador,contanavio);
+				}
+			}
+			break;
+		case 2: // horizontal
+			if(coluna+2>9){//verificando se nao ultrapassa os limites da matriz
+				printf("\nNavio fora dos limites da grade\nDeseja virar para Vertical?\n(1) Sim (2) Nao\n");
+				scanf("%d", &novosentido);
+				while(novosentido<1 || novosentido>2){
+					printf("\nOpcao invalida, digite 1 para Sim ou 2 para Nao\n");
+					scanf("%d", &novosentido);
+				}
+				switch(novosentido){
+					case 1://vertical, verificar se nao ultrapasssa os limites da matriz
+						if(linha+2>9){
+							printf("\nImpossivel alocar o navio, selecione outra posicao\n\n"); // se ultrapassar reinica a funcao
+							fnaviotanque(jogador,contanavio);
+
+						}
+						else{ //senao
+							for(i=linha;i<linha+3;i++){//verifica se ha algum navio na reta
+								if(jogador[i][coluna] == 1){ // se houver volta pro inicio da funcao
+									printf("\nJa existe um navio nesta direcao, selecione outra posicao\n\n");
+									fnaviotanque(jogador,contanavio);
+								}
+							}//se nao houver, vem pra esse 'for'
+							for(i=linha;i<linha+3;i++){//se nao houver, atribui valores a matriz
+								jogador[i][coluna] = 1;
+							}
+							printf("\nNavio alocado com Sucesso!\n\n");
+							if(*contanavio == 1){//verifica contador navio tanque
+								*contanavio = 0;
+								return;
+							}
+							else{
+								temp++;
+								*contanavio = temp;
+								fnaviotanque(jogador,contanavio);
+							}
+						}
+						break;
+					case 2: // senao quiser virar, entao reinicia a funcao
+						fnaviotanque(jogador,contanavio);
+				}
+			}
+			else{//senao ultrapassar os limites
+				for(i=coluna;i<coluna+3;i++){//verifica se nao tem navios na reta
+					if(jogador[linha][i] == 1){
+						printf("\nJa existe um navio nesta direcao, selecione outra posicao\n\n");
+						fnaviotanque(jogador,contanavio);//se houver, reinicia a funcao
+					}
+				}
+				for(i=coluna;i<coluna+3;i++){// se nao houver, vem pra esse 'for' e atribui valor na reta
+					jogador[linha][i] = 1;
+				}
+				printf("\nNavio alocado com Sucesso!\n\n");
+				if(*contanavio == 1){
+					*contanavio = 0;
+					return;
+				}
+				else{
+					temp++;
+					*contanavio = temp;
+					fnaviotanque(jogador, contanavio);
+				}
+			}
+	}
+
+}
+
+/***************ALOCANDO CONTRATORPEDO****************************************************************************************************************************/
+int fcontratorpedo(int jogador[10][10], int *contanavio){
+	int i, j, linha, coluna;
+	int temp = *contanavio, numerar=0;
+	int sentido, novosentido;
+	for(i=0;i<10;i++){
+		printf("%5d ", numerar++);//numerando colunas
+	}
+	numerar = 0;
+	printf("\n");
+	for(i=0;i<10;i++){
+		printf("%d ", numerar++);//numerando linhas
+		for(j=0;j<10;j++){
+			printf("[ %d ] ", jogador[i][j]);
+		}
+		printf("\n");
+	}
+	numerar = 0;
+	printf("\nDigite a posicao que deseja iniciar seu %do Contra-torpedo|2 casas|\n", *contanavio+1);
+	scanf("%d %d",&linha,&coluna);
+	while(linha<0 || linha >9 || coluna < 0 || coluna> 9){
+		printf("\nPosicao invalida, digite (0-9) para linha ou coluna\n");
+		scanf("%d %d", &linha,&coluna);
+	}
+	while(jogador[linha][coluna] == 1){ // verificando se existe um navio na posicao
+		printf("\nJa existe um navio aqui, digite outra posicao\n");
+		scanf("%d %d", &linha,&coluna);
+	}
+	printf("\nEm qual sentido deseja posicionar seu navio?\n(1) Vertical (2) Horizontal\n");
+	scanf("%d", &sentido);
+	while(sentido <1 || sentido>2){
+		printf("\nOpcao invalida, digite 1 para Vertical ou 2 para Horizontal\n");
+		scanf("%d", &sentido);
+	}
+	switch(sentido){
+		case 1: //vertical
+			if(linha+1 > 9){//verificando se nao ultrapassa os limites da matriz
+				printf("\nNavio fora dos limites da grade\nDeseja virar para Horizontal?\n(1) Sim (2) Nao\n");
+				scanf("%d", &novosentido);
+				while(novosentido<1 || novosentido>2){
+					printf("\nOpcao invalida, digite 1 para Sim ou 2 para Nao\n");
+					scanf("%d", &novosentido);
+				}
+				switch(novosentido){
+					case 1: //alocando na horizontal
+						if(coluna+1 > 9){//verificando se excede limite da grade
+							printf("\nImpossivel alocar o navio, selecione outra posicao\n");
+							fcontratorpedo(jogador,contanavio);
+						}
+						else{
+							for(i=coluna;i<coluna+2;i++){ // verificando se existe algum navio na direção
+								if(jogador[linha][i] == 1){
+									printf("\nJa existe um navio nesta direcao, selecione outra posicao\n"); // se houver, volta pro inicio da funcao
+									fcontratorpedo(jogador,contanavio);
+								}
+							}
+							for(i=coluna;i<coluna+2;i++){//caso o primeiro 'for' nao seja verdade, atribui os valores do navio na matriz
+								jogador[linha][i] = 1;
+							}
+							printf("\nNavio alocado com Sucesso!\n");
+							if(*contanavio == 2){
+								*contanavio = 0;
+								return;
+							}
+							else{
+								temp++;
+								*contanavio = temp;
+								fcontratorpedo(jogador,contanavio);
+							}
+						}
+					break;
+					case 2://senao quiser virar, reinicia a funcao
+						fcontratorpedo(jogador,contanavio);
+						break;
+				}
+			}
+			else{//caso nao, atribuir valores a linha
+				for(i=linha;i<linha+2;i++){//verificando se nao ha navio na reta
+					if(jogador[i][coluna] == 1){
+						printf("\nJa existe um navio nesta direcao, selecione outra posicao\n\n");
+						fcontratorpedo(jogador,contanavio);
+					}
+				}
+				for(i=linha;i<linha+2;i++){//caso nao houver, vira para este 'for' e atribui valores a reta
+					jogador[i][coluna] = 1;
+				}
+				printf("\nNavio alocado com Sucesso!\n\n");
+				if(*contanavio == 2){
+					*contanavio = 0;
+					return;
+				}
+				else{
+					temp++;
+					*contanavio = temp;
+					fcontratorpedo(jogador,contanavio);
+				}
+			}
+			break;
+		case 2: // horizontal
+			if(coluna+1>9){//verificando se nao ultrapassa os limites da matriz
+				printf("\nNavio fora dos limites da grade\nDeseja virar para Vertical?\n(1) Sim (2) Nao\n");
+				scanf("%d", &novosentido);
+				while(novosentido<1 || novosentido>2){
+					printf("\nOpcao invalida, digite 1 para Sim ou 2 para Nao\n");
+					scanf("%d", &novosentido);
+				}
+				switch(novosentido){
+					case 1://vertical, verificar se nao ultrapasssa os limites da matriz
+						if(linha+1>9){
+							printf("\nImpossivel alocar o navio, selecione outra posicao\n\n"); // se ultrapassar reinica a funcao
+							fcontratorpedo(jogador,contanavio);
+
+						}
+						else{ //senao
+							for(i=linha;i<linha+2;i++){//verifica se ha algum navio na reta
+								if(jogador[i][coluna] == 1){ // se houver volta pro inicio da funcao
+									printf("\nJa existe um navio nesta direcao, selecione outra posicao\n");
+									fcontratorpedo(jogador,contanavio);
+								}
+							}//se nao houver, vem pra esse 'for'
+							for(i=linha;i<linha+2;i++){//se nao houver, atribui valores a matriz
+								jogador[i][coluna] = 1;
+							}
+							printf("\nNavio alocado com Sucesso!\n\n");
+							if(*contanavio == 2){//verifica contador
+								*contanavio = 0;
+								return;
+							}
+							else{
+								temp++;
+								*contanavio = temp;
+								fcontratorpedo(jogador,contanavio);
+							}
+						}
+						break;
+					case 2: // senao quiser virar, entao reinicia a funcao
+						fcontratorpedo(jogador,contanavio);
+				}
+			}
+			else{//senao ultrapassar os limites
+				for(i=coluna;i<coluna+2;i++){//verifica se nao tem navios na reta
+					if(jogador[linha][i] == 1){
+						printf("\nJa existe um navio nesta direcao, selecione outra posicao\n");
+						fcontratorpedo(jogador,contanavio);//se houver, reinicia a funcao
+					}
+				}
+				for(i=coluna;i<coluna+2;i++){// se nao houver, vem pra esse 'for' e atribui valor na reta
+					jogador[linha][i] = 1;
+				}
+				printf("\nNavio alocado com Sucesso!\n\n");
+				if(*contanavio == 2){
+					*contanavio = 0;
+					return;
+				}
+				else{
+					temp++;
+					*contanavio = temp;
+					fcontratorpedo(jogador,contanavio);
+				}
+			}
+	}
+
+}
+
+/**************ALOCANDO SUBMARINO**********************************************************************************************************************/
+int fsubmarino(int jogador[10][10],int *contanavio){
+	int temp = *contanavio, numerar =0;;
+	int i, j, linha, coluna;
+	for(i=0;i<10;i++){
+		printf("%5d ", numerar++);//numerando colunas
+	}
+	numerar = 0;
+	printf("\n");
+	for(i=0;i<10;i++){
+		printf("%d ", numerar++);//numerando linhas
+		for(j=0;j<10;j++){
+			printf("[ %d ] ", jogador[i][j]);
+		}
+		printf("\n");
+	}
+	numerar = 0;
+	printf("\nEm qual posicao deseja alocar o seu %do Submarino |1 Casa|\n", *contanavio+1);
+	scanf("%d %d", &linha,&coluna);
+	while(linha<0 || linha >9 || coluna < 0 || coluna > 9){
+		printf("\nPosicao invalida, digite (0-9) para linha ou coluna\n");
+		scanf("%d %d", &linha,&coluna);
+	}
+	while(jogador[linha][coluna] == 1){ // verifica se a posicao ja esta ocupada
+		printf("\nJa existe um navio aqui, digite outra posicao\n");
+		scanf("%d %d", &linha,&coluna);
+	}
+	jogador[linha][coluna] = 1;
+	printf("\n\nNavio alocado com Sucesso!\n\n");
+	if(*contanavio == 3){
+		for(i=0;i<10;i++){
+			printf("%5d ", numerar++);//numerando colunas
+		}
+		numerar = 0;
+		printf("\n");
+		for(i=0;i<10;i++){
+			printf("%d ", numerar++);//numerando linhas
+			for(j=0;j<10;j++){
+				printf("[ %d ] ", jogador[i][j]);
+			}
+			printf("\n");
+		}
+		numerar = 0;
+		*contanavio = 0;
+		printf("\n\n***Navios alocados com Sucesso!***\n");
+		for(i=0;i<10;i++){
+			printf("\n");
+		}
+		return;
+	}
+	else{
+		temp++;
+		*contanavio = temp;
+		fsubmarino(jogador,contanavio);
+	}
+}
+
+
+/**************INICIANDO JOGO***************************************************************************************************************************/
+
+
+/**********JOGADOR 1 TURNO**************************************************************************************************************************/
+int fturnoj1(int jogador2[10][10],char j2oculto[10][10],int *acertosj1){
+	int i, j, temp = *acertosj1, numerar=0;
+	int linha, coluna;
+	printf("\n\n");
+	printf("\t\tTiros certos = x | Tiros errados = o\n\n");
+	for(i=0;i<10;i++){
+		printf("%5d ", numerar++);//numerando colunas
+	}
+	numerar = 0;
+	printf("\n");
+	for(i=0;i<10;i++){ // printando matriz sobreposta
+		printf("%d ", numerar++);//numerando linhas
+		for(j=0;j<10;j++){
+			printf("[ %c ] ", j2oculto[i][j]);
+		}
+		printf("\n");
+	}
+	numerar = 0;
+	printf("\nJogador 1 acerte seu tiro!\n");
+	scanf("%d %d", &linha,&coluna);
+	while(linha < 0 || linha > 9 || coluna <0 || coluna > 9){
+		printf("\nPosicao invalida, digite (0-9) para Linha ou Coluna\n");
+		scanf("%d %d", &linha,&coluna);
+	}
+	if(j2oculto[linha][coluna] == 'x' || j2oculto[linha][coluna] == 'o'){//verifica se o jogador ja atirou naquele local
+		while(j2oculto[linha][coluna] == 'x'){
+			printf("\nVoce ja acertou um navio aqui, digite outra posicao\n");
+			scanf("%d %d", &linha, &coluna);
+			while(linha < 0 || linha > 9 || coluna <0 || coluna > 9){
+				printf("\nPosicao invalida, digite (0-9) para Linha ou Coluna\n");
+				scanf("%d %d", &linha,&coluna);
+			}
+		}
+		while(j2oculto[linha][coluna] == 'o'){
+			printf("\nVoce ja atirou aqui, digite outra posicao\n");
+			scanf("%d %d", &linha, &coluna);
+			while(linha < 0 || linha > 9 || coluna <0 || coluna > 9){
+				printf("\nPosicao invalida, digite (0-9) para Linha ou Coluna\n");
+				scanf("%d %d", &linha,&coluna);
+			}
+		}
+	}
+	if(jogador2[linha][coluna] == 1){
+			while(jogador2[linha][coluna] == 1){//  verifica se acertou o tiro, se sim, continua jogando
+				j2oculto[linha][coluna] = 'x';
+				temp++;
+				*acertosj1 = temp;//incrementa acertos
+				printf("\t\tTiros certos = x | Tiros errados = o\n\n");
+				for(i=0;i<10;i++){
+					printf("%5d ", numerar++);//numerando colunas
+				}
+				numerar = 0;
+				printf("\n");
+					for(i=0;i<10;i++){ // printando matriz sobreposta
+						printf("%d ", numerar++);//numerando linhas
+						for(j=0;j<10;j++){
+							printf("[ %c ] ", j2oculto[i][j]);
+						}
+						printf("\n");
+					}
+					numerar = 0;
+					if(*acertosj1 == 20){// se contou, sai da funcao
+						printf("\n\nVoce acertou!!\n\n");
+						return;
+					}
+				printf("\n\nVoce acertou!!\nContinue jogando!\n\n");
+				scanf("%d %d", &linha,&coluna);
+				while(linha < 0 || linha > 9 || coluna <0 || coluna > 9){
+					printf("\nPosicao invalida, digite (0-9) para Linha ou Coluna\n");
+					scanf("%d %d", &linha,&coluna);
+				}
+					if(j2oculto[linha][coluna] == 'x' || j2oculto[linha][coluna] == 'o'){//verifica se o jogador ja atirou naquele local
+						while(j2oculto[linha][coluna] == 'x'){
+							printf("\nVoce ja acertou um navio aqui, digite outra posicao\n");
+							scanf("%d %d", &linha, &coluna);
+							while(linha < 0 || linha > 9 || coluna <0 || coluna > 9){
+								printf("\nPosicao invalida, digite (0-9) para Linha ou Coluna\n");
+								scanf("%d %d", &linha,&coluna);
+							}
+						}
+						while(j2oculto[linha][coluna] == 'o'){
+							printf("\nVoce ja atirou aqui, digite outra posicao\n");
+							scanf("%d %d", &linha, &coluna);
+							while(linha < 0 || linha > 9 || coluna <0 || coluna > 9){
+								printf("\nPosicao invalida, digite (0-9) para Linha ou Coluna\n");
+								scanf("%d %d", &linha,&coluna);
+							}
+						}
+					}
+					if(jogador2[linha][coluna] == 0){//se errou o tiro dentro deste while
+						j2oculto[linha][coluna] = 'o';
+						printf("\t\tTiros certos = x | Tiros errados = o\n\n");
+						for(i=0;i<10;i++){
+							printf("%5d ", numerar++);//numerando colunas
+						}
+						numerar = 0;
+						printf("\n");
+							for(i=0;i<10;i++){//printando matriz sobreposta
+								printf("%d ", numerar++);//numerando linhas
+									for(j=0;j<10;j++){
+										printf("[ %c ] ", j2oculto[i][j]);
+									}
+								printf("\n");
+							}
+						numerar=0;
+					printf("\nVoce errou o tiro :/\n\nAgora eh a vez de Jogador 2\n\n");
+					return;
+					}
+			}
+	}
+	else if(jogador2[linha][coluna] == 0){//se errar vem pra ca
+		j2oculto[linha][coluna] = 'o';
+		printf("\t\tTiros certos = x | Tiros errados = o\n\n");
+		for(i=0;i<10;i++){
+			printf("%5d ", numerar++); // numerando colunas
+		}
+		numerar = 0;
+		printf("\n");
+			for(i=0;i<10;i++){//printando matriz sobreposta
+				printf("%d ", numerar++);//numerando linhas
+				for(j=0;j<10;j++){
+					printf("[ %c ] ", j2oculto[i][j]);
+				}
+				printf("\n");
+			}
+			numerar = 0;
+		printf("\nVoce errou o tiro :/\n\nAgora eh a vez de Jogador 2\n\n");
+		return;
+	}
+
+}
+
+
+/******JOGADOR 2 TURNO***********************************************************************************************************************************/
+int fturnoj2(int jogador1[10][10],char j1oculto[10][10],int *acertosj2){
+	int i, j, temp = *acertosj2, numerar=0;
+	int linha, coluna;
+	printf("\n\n");
+	printf("\t\tTiros certos = x | Tiros errados = o\n\n");
+	for(i=0;i<10;i++){
+		printf("%5d ", numerar++);//numerando colunas
+	}
+	numerar = 0;
+	printf("\n");
+	for(i=0;i<10;i++){
+		printf("%d ", numerar++);//numerando linhas
+		for(j=0;j<10;j++){
+			printf("[ %c ] ", j1oculto[i][j]);
+		}
+		printf("\n");
+	}
+	numerar=0;
+	printf("\n\nJogador 2 acerte seu tiro!\n");
+	scanf("%d %d", &linha,&coluna);
+	while(linha < 0 || linha > 9 || coluna <0 || coluna > 9){
+		printf("\nPosicao invalida, digite (0-9) para Linha ou Coluna\n");
+		scanf("%d %d", &linha,&coluna);
+	}
+	if(j1oculto[linha][coluna] == 'x' || j1oculto[linha][coluna] == 'o'){//verifica se o jogador ja atirou naquele local
+		while(j1oculto[linha][coluna] == 'x'){
+			printf("\nVoce ja acertou um navio aqui, digite outra posicao\n");
+			scanf("%d %d", &linha, &coluna);
+			while(linha < 0 || linha > 9 || coluna <0 || coluna > 9){
+				printf("\nPosicao invalida, digite (0-9) para Linha ou Coluna\n");
+				scanf("%d %d", &linha,&coluna);
+			}
+		}
+		while(j1oculto[linha][coluna] == 'o'){
+			printf("\nVoce ja atirou aqui, digite outra posicao\n");
+			scanf("%d %d", &linha, &coluna);
+			while(linha < 0 || linha > 9 || coluna <0 || coluna > 9){
+				printf("\nPosicao invalida, digite (0-9) para Linha ou Coluna\n");
+				scanf("%d %d", &linha,&coluna);
+			}
+		}
+	}
+	if(jogador1[linha][coluna] == 1){
+		while(jogador1[linha][coluna] == 1){//  verifica se acertou o tiro, se sim, continua jogando
+			j1oculto[linha][coluna] = 'x';
+			temp++;
+			*acertosj2 = temp;
+			printf("\t\tTiros certos = x | Tiros errados = o\n\n");
+				for(i=0;i<10;i++){
+					printf("%5d ", numerar++);//numerando colunas
+				}
+			numerar = 0;
+			printf("\n");
+				for(i=0;i<10;i++){//printando matriz sobreposta
+					printf("%d ", numerar++);//numerando linhas
+						for(j=0;j<10;j++){
+							printf("[ %c ] ", j1oculto[i][j]);
+						}
+					printf("\n");
+				}
+			numerar=0;
+			if(*acertosj2 == 20){//se acertou 20 vezes sai da funcao
+				printf("\n\nVoce acertou!!\n\n");
+				return;
+			}
+			printf("\n\nVoce acertou!!\nContinue jogando!\n\n");
+			scanf("%d %d", &linha,&coluna);
+			while(linha < 0 || linha > 9 || coluna <0 || coluna > 9){
+				printf("\nPosicao invalida, digite (0-9) para Linha ou Coluna\n");
+				scanf("%d %d", &linha,&coluna);
+			}
+			if(j1oculto[linha][coluna] == 'x'|| j1oculto[linha][coluna] == 'o'){//verifica se o jogador ja atirou naquele local
+				while(j1oculto[linha][coluna] == 'x'){
+					printf("\nVoce ja acertou um navio aqui, digite outra posicao\n");
+					scanf("%d %d", &linha, &coluna);
+					while(linha < 0 || linha > 9 || coluna <0 || coluna > 9){
+						printf("\nPosicao invalida, digite (0-9) para Linha ou Coluna\n");
+						scanf("%d %d", &linha,&coluna);
+					}
+				}
+				while(j1oculto[linha][coluna] == 'o'){
+					printf("\nVoce ja atirou aqui, digite outra posicao\n");
+					scanf("%d %d", &linha, &coluna);
+					while(linha < 0 || linha > 9 || coluna <0 || coluna > 9){
+						printf("\nPosicao invalida, digite (0-9) para Linha ou Coluna\n");
+						scanf("%d %d", &linha,&coluna);
+					}
+				}
+			}
+
+			if(jogador1[linha][coluna] == 0){//se errou o tiro dentro deste while
+				j1oculto[linha][coluna] = 'o';
+				printf("\t\tTiros certos = x | Tiros errados = o\n\n");
+				for(i=0;i<10;i++){
+					printf("%5d ", numerar++);//numerando colunas
+				}
+				numerar = 0;
+				printf("\n");
+					for(i=0;i<10;i++){//printando matriz sobreposta
+						printf("%d ", numerar++);//numerando linhas
+							for(j=0;j<10;j++){
+								printf("[ %c ] ", j1oculto[i][j]);
+							}
+						printf("\n");
+					}
+				numerar=0;
+			printf("\nVoce errou o tiro :/\n\nAgora eh a vez de Jogador 1\n\n");
+			return;
+			}
+		}
+	}
+	else if(jogador1[linha][coluna] == 0){
+		j1oculto[linha][coluna] = 'o';
+		printf("\t\tTiros certos = x | Tiros errados = o\n\n");
+			for(i=0;i<10;i++){
+				printf("%5d ", numerar++);//numerando colunas
+			}
+			numerar = 0;
+			printf("\n");
+				for(i=0;i<10;i++){//printando matriz sobreposta
+					printf("%d ", numerar++);//numerando linhas
+						for(j=0;j<10;j++){
+							printf("[ %c ] ", j1oculto[i][j]);
+						}
+					printf("\n");
+				}
+			numerar=0;
+		printf("\nVoce errou o tiro :/\n\nAgora eh a vez de Jogador 1\n\n");
+		return;
+	}
+
+}
+
+
+/*************************VENCEU*************************************************************************************************************************/
+int fvencedor(int jogador1[10][10],char j1oculto[10][10],int *acertosj1,int jogador2[10][10],char j2oculto[10][10], int *acertosj2 ){
+	int i, j;
+	if(*acertosj1 == 20){
+		printf("\nJogador 1 derrubou todos os navios!!\n\nResultado da partida:\n\n");
+
+		printf("Total de acertos Jogador 1: %d\t\t\t\t\t\tPosicao dos navios do Jogador 2\n", *acertosj1);
+		for(i=0;i<10;i++){
+			for(j=0;j<10;j++){
+				if(j == 9){
+					printf("[ %c ]\t\t",j2oculto[i][j]);
+				}
+				else{
+					printf("[ %c ]", j2oculto[i][j]);
+				}
+			}
+			for(j=0;j<10;j++){
+				printf("[ %d ]", jogador2[i][j]);
+			}
+			printf("\n");
+		}
+		printf("\n\nTotal de acertos Jogador 2: %d\t\t\t\t\t\tPosicao dos navios do Jogador 1\n", *acertosj2);
+		for(i=0;i<10;i++){
+			for(j=0;j<10;j++){
+				if(j == 9){
+					printf("[ %c ]\t\t",j1oculto[i][j]);
+				}
+				else{
+					printf("[ %c ]", j1oculto[i][j]);
+				}
+			}
+			for(j=0;j<10;j++){
+				printf("[ %d ]", jogador1[i][j]);
+			}
+			printf("\n");
+		}
+		for(i=0;i<10;i++){//zerando matrizes e acertos
+			for(j=0;j<10;j++){
+				jogador1[i][j] = 0;
+				jogador2[i][j] = 0;
+				j1oculto[i][j] = '~';
+				j2oculto[i][j] = '~';
+			}
+		}
+		*acertosj1 = 0;
+		*acertosj2 = 0;
+		printf("\n\n\n");
+		return;
+	}
+	else if(*acertosj2 == 20){
+		printf("\nJogador 2 derrubou todos os navios!!\n\nResultado da partida:\n\n");
+
+		printf("Total de acertos Jogador 2: %d\t\t\t\t\t\tPosicao dos navios do Jogador 1\n", *acertosj2);
+		for(i=0;i<10;i++){
+			for(j=0;j<10;j++){
+				if(j == 9){
+					printf("[ %c ]\t\t",j1oculto[i][j]);
+				}
+				else{
+					printf("[ %c ]", j1oculto[i][j]);
+				}
+			}
+			for(j=0;j<10;j++){
+				printf("[ %d ]", jogador1[i][j]);
+			}
+			printf("\n");
+		}
+		printf("\n\nTotal de acertos Jogador 1: %d\t\t\t\t\t\tPosicao dos navios do Jogador 2\n", *acertosj1);
+		for(i=0;i<10;i++){
+			for(j=0;j<10;j++){
+				if(j == 9){
+					printf("[ %c ]\t\t",j2oculto[i][j]);
+				}
+				else{
+					printf("[ %c ]", j2oculto[i][j]);
+				}
+			}
+			for(j=0;j<10;j++){
+				printf("[ %d ]", jogador2[i][j]);
+			}
+			printf("\n");
+		}
+		//zerando matrizes e acertos
+		for(i=0;i<10;i++){
+			for(j=0;j<10;j++){
+				jogador1[i][j] = 0;
+				jogador2[i][j] = 0;
+				j1oculto[i][j] = '~';
+				j2oculto[i][j] = '~';
+			}
+		}
+		*acertosj1 = 0;
+		*acertosj2 = 0;
+		printf("\n\n\n");
+		return;
+	}
+}
+
+
+int main(){
+	int jogador1[10][10],jogador2[10][10];
+	char j1oculto[10][10],j2oculto[10][10];
+	int i, j, menu1, contanavio=0, conta=0;;
+	int acertosj1=0, acertosj2=0, vitoriasj1=0,vitoriasj2=0;
+
+	for(i=0;i<10;i++){
+		for(j=0;j<10;j++){
+			jogador1[i][j] = 0;
+			jogador2[i][j] = 0;
+		}
+	}
+	for(i=0;i<10;i++){
+		for(j=0;j<10;j++){
+			j1oculto[i][j] = '~';
+			j2oculto[i][j] = '~';
+		}
+	}
+	while(menu1 != 3){
+	printf("***Bem vindo ao Batalha Naval***\n\nVITORIAS JOGADOR 1: %d | VITORIAS JOGADOR 2: %d\n\n(1) Alocar Navios\n(2) Iniciar Jogo\n(3) Encerrar Jogo\n\nEscolha uma opcao\n", vitoriasj1, vitoriasj2);
+	scanf("%d", &menu1);
+		switch(menu1){
+			case 1:
+				for(i=0;i<10;i++){
+					for(j=0;j<10;j++){
+						if(jogador2[i][j] == 1)
+							conta++;
+					}
+				}
+				if(conta == 20){
+					printf("\n\nNavios ja estao alocados\n\n");
+					conta = 0;
+					break;
+				}
+				for(i=0;i<2;i++){
+					if(i==0){
+					printf("\n\nJogador %d posicione seus Navios | Digite Linha e Coluna\n\n", i+1);
+						fportaavioes(jogador1);
+						fnaviotanque(jogador1, &contanavio);
+						fcontratorpedo(jogador1, &contanavio);
+						fsubmarino(jogador1, &contanavio);
+					}
+					else if(i==1){
+					printf("\n\nJogador %d posicione seus Navios | Digite Linha e Coluna\n\n", i+1);
+						fportaavioes(jogador2);
+						fnaviotanque(jogador2, &contanavio);
+						fcontratorpedo(jogador2, &contanavio);
+						fsubmarino(jogador2, &contanavio);
+					}
+				}
+			break;
+			case 2:
+				for(i=0;i<10;i++){
+					for(j=0;j<10;j++){
+						if(jogador2[i][j] == 1)
+							conta++;
+					}
+				}
+				if(conta == 20){
+					while(acertosj1 < 20 || acertosj2 < 20){
+						fturnoj1(jogador2,j2oculto, &acertosj1);
+						if(acertosj1 == 20){
+							break;
+						}
+						fturnoj2(jogador1,j1oculto, &acertosj2);
+						if(acertosj2 == 20){
+							break;
+						}
+					}
+					if(acertosj1 == 20){//atribuindo numero de vitorias
+						vitoriasj1++;
+					}
+					else if(acertosj2 == 20){
+						vitoriasj2++;
+					}
+					fvencedor(jogador1,j1oculto,&acertosj1,jogador2,j2oculto,&acertosj2);
+					conta=0;
+				}
+				else{
+					printf("\nNavios ainda nao alocados!\n\n");
+				}
+
+				break;
+			case 3:
+				printf("\nAte a proxima!\n");
+				return 0;
+
+			default:
+				printf("\nOpcao invalida\n\n");
+				break;
+		}
+	}
+	return 0;
+}
